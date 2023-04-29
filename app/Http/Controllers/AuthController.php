@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -15,14 +16,14 @@ class AuthController extends Controller
         $attrs = $request->validate([
             'name' => 'required|string',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6|confirmed'
+            // 'password' => 'required|min:6|confirmed'
         ]);
 
         //create user
         $user = User::create([
             'name' => $attrs['name'],
             'email' => $attrs['email'],
-            'password' => bcrypt($attrs['password'])
+            'password' => Hash::make('password')
         ]);
 
         //return user & token in response
